@@ -29,7 +29,7 @@ If you change Google Sheets deployments later, update the URL in `index.html` an
 The script creates these tabs automatically:
 
 - `AppState` — complete app backup used for reliable round-trip syncing
-- `Meals` — one row per calendar-day meal type (Breakfast, Lunch, Dinner, or Snack) with totals
+- `Meals` — one row per meal with totals
 - `Food Items` — one row per food item
 - `Weight` — weight history in lbs
 - `Goals` — daily macro goals
@@ -69,12 +69,3 @@ The OpenAI API key is **not** stored in `index.html` or exposed to the browser. 
 You do not put the OpenAI key into `index.html`. Your existing Google Apps Script `/exec` URL remains the same.
 
 The estimator uses OpenAI's Responses API with `gpt-5-mini`, a cost-efficient model suited to well-defined tasks. Estimates are approximations and should be checked against nutrition labels when accuracy matters.
-
-
-## Meal diary
-
-The app now uses a meal-diary model instead of separate named meals. Each calendar day has four meal slots: Breakfast, Lunch, Dinner, and Snack. Food items are added directly to one of those slots.
-
-Existing data is migrated automatically when the app first loads the new version. If multiple Breakfast/Lunch/Dinner/Snack meals exist on the same date, their food items are combined into the single corresponding diary slot. The original meal IDs that were merged are retained in the deletion metadata so Google Sheets does not recreate the old duplicate meals during sync.
-
-The Meal Diary page includes a date picker and previous/next day controls. The dashboard meal-type cards now show the foods logged for each meal type and the totals for that day's single meal slot.

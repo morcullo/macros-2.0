@@ -83,20 +83,66 @@ function estimateFood_(e) {
     if (!food) throw new Error('Enter a food item first.');
     const key = PropertiesService.getScriptProperties().getProperty('OPENAI_API_KEY');
     if (!key) throw new Error('OpenAI API key is not configured in Apps Script.');
+
+    // Nutrition estimator is deliberately stricter than a normal chat prompt.
+    // It prioritizes exact labels / official sources, then authoritative food databases,
+    // and only falls back to a calculated estimate when an exact match is unavailable.
     const prompt = [
-      'Estimate nutrition for the food item below.',
-      'Return ONLY valid JSON with exactly these keys: name, calories, protein, carbs, fat, assumption.',
-      'Calories and macros should be for the serving/quantity stated by the user.',
-      'If no serving size is stated, use a reasonable standard serving and explain that assumption briefly.',
-      'Use numeric values for calories, protein, carbs, and fat. Do not include units in numeric fields.',
-      'Do not invent a brand unless the user provided one.',
+      'You are a meticulous nutrition-database assistant. Estimate calories and macros for the exact food description supplied by the user.',
+      '',
+      'ACCURACY RULES:',
+      '1. Parse every quantity, unit, preparation method, and qualifier in the user input. Preserve the stated serving size exactly.',
+      '2. If the user gives grams/ounces/ml/pieces, calculate the nutrition for that exact amount; do NOT silently substitute a standard serving.',
+      '3. Treat raw vs cooked as materially different. If the user says cooked, use cooked nutrition. If they say raw, use raw nutrition. If preparation state is genuinely ambiguous, make the most likely assumption and state it.',
+      '4. For branded, restaurant, packaged, or chain foods, search the web for the current official nutrition facts first. Prefer the manufacturer/restaurant official site or nutrition PDF.',
+      '5. For generic foods, search authoritative nutrition databases when possible (USDA FoodData Central, Canadian Nutrient File, or equivalent government/academic sources).',
+      '6. Never use a search snippet alone when a primary nutrition page or nutrition label is available. Cross-check conflicting values and choose the most authoritative/relevant source.',
+      '7. Do not invent a brand, recipe, sauce, oil, or ingredient. If an ingredient is unspecified, use a standard preparation only when necessary and clearly disclose it.',
+      '8. For mixed dishes or restaurant meals, break the item into plausible components internally, estimate each component, then sum calories/protein/carbs/fat. Include likely cooking oil/sauces only if the description indicates them or they are intrinsic to the dish.',
+      '9. Calories and macros must be internally consistent. Protein/carbs provide 4 kcal/g and fat provides 9 kcal/g, allowing for fiber, rounding, sugar alcohols, and database label conventions. If a database calorie value is authoritative, use that value and keep macros close to it.',
+      '10. Do not double-count ingredients. Do not count a condiment, dressing, cheese, oil, or topping unless it is actually part of the described serving.',
+      '11. Give realistic precision: calories to the nearest whole number; macros to one decimal place. Do not create fake precision beyond what the source supports.',
+      '12. If the input is too vague to estimate responsibly, use a clearly stated standard assumption rather than pretending it is exact.',
+      '',
+      'SEARCH POLICY:',
+      '- You MUST use web search for branded/restaurant/packaged foods, named menu items, or foods where an exact current label materially improves accuracy.',
+      '- You SHOULD use web search for generic foods when authoritative nutrition data is likely to improve the estimate.',
+      '- Prefer official sources and government/academic nutrition databases over blogs, social media, and generic calorie sites.',
+      '',
+      'OUTPUT:',
+      'Return ONLY the requested JSON object. No markdown, no citations outside the JSON, no extra commentary.',
+      'The assumption field should briefly state the serving/preparation assumption and, when web data was used, the source type (for example: "official nutrition label; 6 oz cooked serving").',
+      '',
       'Food item: ' + food
     ].join('\n');
+
     const payload = {
-      model: 'gpt-5-mini',
+      model: 'gpt-5.6-terra',
+      tools: [{ type: 'web_search' }],
       input: prompt,
-      max_output_tokens: 250
+      max_output_tokens: 1200,
+      text: {
+        format: {
+          type: 'json_schema',
+          name: 'food_nutrition_estimate',
+          strict: true,
+          schema: {
+            type: 'object',
+            additionalProperties: false,
+            properties: {
+              name: {type: 'string'},
+              calories: {type: 'number'},
+              protein: {type: 'number'},
+              carbs: {type: 'number'},
+              fat: {type: 'number'},
+              assumption: {type: 'string'}
+            },
+            required: ['name', 'calories', 'protein', 'carbs', 'fat', 'assumption']
+          }
+        }
+      }
     };
+
     const response = UrlFetchApp.fetch('https://api.openai.com/v1/responses', {
       method: 'post',
       contentType: 'application/json',
@@ -106,18 +152,40 @@ function estimateFood_(e) {
     });
     const code = response.getResponseCode();
     const body = response.getContentText();
-    if (code < 200 || code >= 300) throw new Error('OpenAI request failed (' + code + ').');
+    if (code < 200 || code >= 300) {
+      let detail = '';
+      try { detail = JSON.parse(body).error?.message || ''; } catch (_) {}
+      throw new Error('OpenAI request failed (' + code + ')' + (detail ? ': ' + detail : '.'));
+    }
+
     const parsed = JSON.parse(body);
     let text = parsed.output_text || '';
     if (!text && Array.isArray(parsed.output)) {
       parsed.output.forEach(item => {
         if (item && item.type === 'message' && Array.isArray(item.content)) {
-          item.content.forEach(part => { if (part && part.type === 'output_text') text += part.text || ''; });
+          item.content.forEach(part => {
+            if (part && part.type === 'output_text') text += part.text || '';
+          });
         }
       });
     }
+
+    // If the API reports an incomplete response, surface a useful error rather than
+    // attempting to parse truncated JSON.
+    if (parsed.status === 'incomplete' || (parsed.incomplete_details && parsed.incomplete_details.reason)) {
+      throw new Error('The nutrition estimate was incomplete. Please try again.');
+    }
+
     const jsonText = String(text).trim().replace(/^```json\s*/i,'').replace(/\s*```$/,'');
-    const foodData = JSON.parse(jsonText);
+    if (!jsonText) throw new Error('The AI returned an empty estimate. Please try again.');
+
+    let foodData;
+    try {
+      foodData = JSON.parse(jsonText);
+    } catch (parseErr) {
+      throw new Error('The AI returned incomplete nutrition data. Please try the estimate again.');
+    }
+
     const clean = {
       name: String(foodData.name || food),
       calories: Math.max(0, Number(foodData.calories) || 0),
