@@ -20,7 +20,7 @@
     body{touch-action:pan-x pan-y}
     input,textarea,select{font-size:16px}
     .pull-refresh{position:fixed;top:10px;left:50%;transform:translate(-50%,-70px);z-index:100;background:#24221f;border:1px solid var(--orange);color:var(--orange);border-radius:999px;padding:8px 14px;font-size:12px;font-weight:800;opacity:0;transition:.2s;pointer-events:none}.pull-refresh.show{transform:translate(-50%,0);opacity:1}.pull-refresh .spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,184,28,.25);border-top-color:var(--orange);border-radius:50%;vertical-align:-2px;margin-right:6px;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
-    .date-picker-wrap{position:relative;display:inline-flex}.date-picker-wrap input{position:absolute;inset:0;width:100%;height:100%;opacity:.01;cursor:pointer;z-index:2;margin:0;padding:0;border:0}.date-picker-wrap .date-pill{position:relative;z-index:1}
+    .date-picker-wrap{position:relative;display:inline-flex;z-index:1}.date-picker-wrap input{position:absolute;inset:0;width:100%;height:100%;opacity:.01;cursor:pointer;z-index:2;margin:0;padding:0;border:0}.date-picker-wrap .date-pill{position:relative;z-index:1}
     .meal-date-time{display:block;width:100%!important;max-width:none!important;min-width:0;box-sizing:border-box;appearance:none;-webkit-appearance:none}
     .goal-card.shape-1:after{transform:rotate(45deg);border-radius:20px}.goal-card.shape-2:after{transform:rotate(0deg);border-radius:50%;width:150px;height:150px}.goal-card.shape-3:after{transform:rotate(30deg);border-radius:8px;width:170px;height:170px}.goal-card.shape-4:after{transform:rotate(60deg);border-radius:50% 12px 50% 12px;width:160px;height:160px}
     .modal-actions .danger{border:1px solid #6b3028;background:#2d1714;color:#ff8f7d;border-radius:13px;padding:0;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-right:auto;flex:0 0 44px;line-height:0}.modal-actions .icon-action{width:44px;height:44px;padding:0;display:flex;align-items:center;justify-content:center;line-height:0}.modal-actions .icon-action svg{width:20px;height:20px;display:block;flex:0 0 auto;margin:0}
@@ -42,7 +42,7 @@
     h3{margin:0;font-size:17px}
     .sub{color:var(--muted);margin:0}
     .date-row{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:22px 0}
-    .date-nav{display:flex;align-items:center;gap:8px}
+    .date-nav{display:flex;align-items:center;gap:8px;position:relative;z-index:3}.date-nav>button{position:relative;z-index:4}
     .date-nav button{border:1px solid var(--line);background:var(--panel);color:var(--text);width:38px;height:38px;border-radius:12px}
     .date-pill{background:var(--panel);border:1px solid var(--line);padding:9px 13px;border-radius:12px;font-weight:700}
     .hero{position:relative;overflow:hidden;border:1px solid #3a3324;background:linear-gradient(135deg,#1b1916 0%,#171615 62%,#211b10 100%);border-radius:28px;padding:28px;box-shadow:var(--shadow)}
@@ -1503,8 +1503,8 @@ function viewMeal(id){
   const viewDate=mealDate(m)||localIsoDate();
   const viewType=mealType(m);
   document.getElementById('mealViewEyebrow').textContent='';
-  document.getElementById('mealViewTypeIcon').innerHTML='';
-  document.getElementById('mealViewTypeIcon').style.display='none';
+  document.getElementById('mealViewTypeIcon').innerHTML=mealIcon(viewType);
+  document.getElementById('mealViewTypeIcon').style.display='grid';
   document.getElementById('mealViewTitle').textContent=`${fmtDate(new Date(viewDate+'T12:00:00'))} · ${mealTypeLabel(viewType)}`;
   document.getElementById('mealViewMeta').textContent='';
   document.getElementById('mealViewMeta').style.display='none';
@@ -1577,6 +1577,8 @@ function showToast(s){const t=document.getElementById('toast');t.textContent=s;t
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
 function openDashboardDatePicker(){const el=document.getElementById('dashboardDatePicker');if(!el)return;el.value=localIsoDate(currentDate);try{if(typeof el.showPicker==='function'){el.showPicker();return}}catch(err){};el.focus();el.click()}
 document.getElementById('dateLabel').addEventListener('click',openDashboardDatePicker);
+
+document.querySelectorAll('.date-nav>button').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();}));
 document.getElementById('dateLabel').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')openDashboardDatePicker()});
 document.getElementById('dashboardDatePicker').addEventListener('change',e=>{if(e.target.value){const [y,m,d]=e.target.value.split('-').map(Number);currentDate=new Date(y,m-1,d,12);renderDashboard()}});
 const diaryDateLabel=document.getElementById('diaryDateLabel');
