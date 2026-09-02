@@ -19,6 +19,7 @@
     html{touch-action:pan-x pan-y;overscroll-behavior-y:none}
     body{touch-action:pan-x pan-y}
     input,textarea,select{font-size:16px}
+    .initial-loading{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:24px}.initial-loading-card{width:min(360px,100%);text-align:center}.initial-loading-brand{display:flex;align-items:center;justify-content:center;gap:11px;font-weight:800;font-size:22px;letter-spacing:-.7px;margin-bottom:28px}.initial-loading-brand-mark{width:42px;height:42px;border:2px solid var(--orange);border-radius:13px;display:grid;place-items:center;color:var(--orange);font-size:20px}.initial-loading-spinner{width:64px;height:64px;margin:0 auto 18px;position:relative;animation:dumbbell-bounce 1s ease-in-out infinite}.initial-loading-spinner:before,.initial-loading-spinner:after{content:"";position:absolute;top:25px;width:18px;height:14px;border:4px solid var(--orange);border-radius:4px}.initial-loading-spinner:before{left:0}.initial-loading-spinner:after{right:0}.initial-loading-spinner{background:linear-gradient(var(--orange),var(--orange)) center/32px 6px no-repeat}.initial-loading-spinner i{display:none}@keyframes dumbbell-bounce{0%,100%{transform:rotate(-8deg) scale(1)}50%{transform:rotate(8deg) scale(1.06)}}.initial-loading-title{font-size:18px;font-weight:800;margin-bottom:6px}.initial-loading-text{font-size:13px;color:var(--muted);line-height:1.5}.initial-loading-error{display:none;color:var(--red);font-size:13px;line-height:1.5;margin-top:14px}.initial-loading.retry .initial-loading-spinner{display:none}.initial-loading.retry .initial-loading-error{display:block}.initial-loading.retry .initial-loading-text{display:none}.initial-loading-retry{display:none;margin:18px auto 0;border:1px solid var(--orange);background:var(--orange);color:#11100f;border-radius:13px;padding:10px 18px;font-weight:800}.initial-loading.retry .initial-loading-retry{display:block}.app.initial-loading-hidden{visibility:hidden}.app.initial-loading-ready{visibility:visible}
     .pull-refresh{position:fixed;top:10px;left:50%;transform:translate(-50%,-70px);z-index:100;background:#24221f;border:1px solid var(--orange);color:var(--orange);border-radius:999px;padding:8px 14px;font-size:12px;font-weight:800;opacity:0;transition:.2s;pointer-events:none}.pull-refresh.show{transform:translate(-50%,0);opacity:1}.pull-refresh .spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,184,28,.25);border-top-color:var(--orange);border-radius:50%;vertical-align:-2px;margin-right:6px;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
     .date-picker-wrap{position:relative;display:inline-flex;z-index:1}.date-picker-wrap input{position:absolute;inset:0;width:100%;height:100%;opacity:.01;cursor:pointer;z-index:2;margin:0;padding:0;border:0}.date-picker-wrap .date-pill{position:relative;z-index:1}
     .meal-date-time{display:block;width:100%!important;max-width:none!important;min-width:0;box-sizing:border-box;appearance:none;-webkit-appearance:none}
@@ -546,8 +547,8 @@
     @media(max-width:540px){.diary-date-nav{grid-template-columns:38px minmax(0,1fr) 38px;gap:7px}.diary-date-nav .icon-month{width:38px;height:40px}.diary-meal-section{padding:15px}.diary-food{align-items:flex-start}.diary-food-macros{gap:6px;font-size:9px}.diary-food-macros em{font-size:8px}.diary-action-btn{width:38px;height:38px}.diary-action-btn svg{width:18px;height:18px}.meal-type-summary-card{padding:14px!important}}
 </style>
 </head>
-<body><div class="pull-refresh" id="pullRefresh"><span class="spinner"></span>Refreshing…</div>
-<div class="app">
+<body><div class="initial-loading" id="initialLoading" aria-live="polite"><div class="initial-loading-card"><div class="initial-loading-brand"><div class="initial-loading-brand-mark">◎</div><span>Macros</span></div><div class="initial-loading-spinner" aria-label="Loading"><i></i></div><div class="initial-loading-title">Loading your data</div><div class="initial-loading-text">Getting your latest data from Google Sheets…</div><div class="initial-loading-error" id="initialLoadingError">We couldn’t load your data from Google Sheets. Please try again.</div><button type="button" class="initial-loading-retry" onclick="retryInitialLoad()">Try again</button></div></div><div class="pull-refresh" id="pullRefresh"><span class="spinner"></span>Refreshing…</div>
+<div class="app initial-loading-hidden">
   <header class="topbar">
     <div class="brand"><div class="brand-mark" aria-label="Macros app icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8v8M4.5 9.5v5M2.5 11v2M17 8v8M19.5 9.5v5M21.5 11v2M7 12h10"/></svg></div><span>Macros</span></div>
   </header>
@@ -811,6 +812,24 @@ function notifyRemoteLoad(incoming){
   const waiters=remoteLoadWaiters.splice(0);
   waiters.forEach(fn=>{try{fn(incoming||null)}catch(err){console.error(err)}});
 }
+function finishInitialLoading(success){
+  const overlay=document.getElementById('initialLoading');
+  const app=document.querySelector('.app');
+  if(!overlay||!app)return;
+  if(success){
+    overlay.remove();
+    app.classList.remove('initial-loading-hidden');
+    app.classList.add('initial-loading-ready');
+  }else{
+    overlay.classList.add('retry');
+  }
+}
+function retryInitialLoad(){
+  const overlay=document.getElementById('initialLoading');
+  if(overlay)overlay.classList.remove('retry');
+  if(sheetSyncUrl)loadFromSheet(false);
+  else finishInitialLoading(false);
+}
 function loadFromSheet(showToastOnSuccess=false,afterLoad=null){
   if(!sheetSyncUrl){setSyncStatus('Google Sheets URL is not configured.','error');if(afterLoad)afterLoad(null);return;}
   if(remoteLoadInFlight){if(afterLoad)remoteLoadWaiters.push(afterLoad);return;}
@@ -822,7 +841,7 @@ function loadFromSheet(showToastOnSuccess=false,afterLoad=null){
       delete window[callback];
       if(incoming&&Array.isArray(incoming.meals)){
         const beforeMeals=JSON.stringify(incoming.meals);
-        applyState(incoming); appDataLoaded=true; refreshUI();
+        applyState(incoming); appDataLoaded=true; refreshUI(); finishInitialLoading(true);
         lastLocalMutation=Math.max(lastLocalMutation,Number(incoming._updatedAt||0));
         setSyncStatus('Connected — data loaded from Google Sheets.','connected');
         if(beforeMeals!==JSON.stringify(state.meals)){
@@ -832,12 +851,12 @@ function loadFromSheet(showToastOnSuccess=false,afterLoad=null){
         if(showToastOnSuccess)showToast('Google Sheet connected');
       }else if(incoming&&incoming.__empty){
         state.meals=[];state.weights=[];state.foodLibrary=[];state._deletedMealIds=[];
-        state._updatedAt=Number(incoming._updatedAt||0); appDataLoaded=true; refreshUI();
+        state._updatedAt=Number(incoming._updatedAt||0); appDataLoaded=true; refreshUI(); finishInitialLoading(true);
         setSyncStatus('Connected — Google Sheet is empty.','connected');
       }else throw new Error('The sheet response was not valid app data.');
     }catch(err){
       console.error(err); result=null;
-      setSyncStatus('Could not read the Google Sheet.','error');
+      setSyncStatus('Could not read the Google Sheet.','error'); finishInitialLoading(false);
     }finally{
       remoteLoadInFlight=false;
       if(afterLoad)remoteLoadWaiters.push(afterLoad);
@@ -848,6 +867,7 @@ function loadFromSheet(showToastOnSuccess=false,afterLoad=null){
   script.src=sheetSyncUrl+'?callback='+encodeURIComponent(callback)+'&t='+Date.now();
   script.onerror=()=>{
     delete window[callback]; remoteLoadInFlight=false;
+    finishInitialLoading(false);
     setSyncStatus('Could not connect. Check the deployment URL and access setting.','error');
     if(afterLoad)remoteLoadWaiters.push(afterLoad);
     notifyRemoteLoad(null);
@@ -1597,10 +1617,9 @@ let pullStartY=0,pulling=false;document.addEventListener('touchstart',e=>{if(win
 async function triggerPullRefresh(){const el=document.getElementById('pullRefresh');el.classList.add('show');if(sheetSyncUrl)await new Promise(r=>{const old=remoteLoadInFlight;loadFromSheet(false);let n=0;const t=setInterval(()=>{if(!remoteLoadInFlight||++n>40){clearInterval(t);r()}},50)});else refreshUI();setTimeout(()=>el.classList.remove('show'),350)}
 ['Calories','Protein','Carbs','Fat'].forEach(k=>{const el=document.getElementById('goal'+k);if(el)el.addEventListener('input',markGoalsDirty);});
 renderTip();updateGreeting();setInterval(updateGreeting,600000);updateSyncUI();
-// Paint the lightweight UI immediately, then start the Google Sheets request.
-// This prevents the first screen from feeling blocked by the remote data load.
-refreshUI();
-if(sheetSyncUrl){requestAnimationFrame(()=>loadFromSheet(false));startSheetPolling()}else{setSyncStatus('Google Sheets URL is not configured.','error')}
+// Do not render the app with placeholder/local data. Keep the loading screen visible
+// until the first Google Sheets load succeeds so the user never sees stale data.
+if(sheetSyncUrl){requestAnimationFrame(()=>loadFromSheet(false));startSheetPolling()}else{setSyncStatus('Google Sheets URL is not configured.','error');finishInitialLoading(false)}
 </script>
 </body>
 </html>
