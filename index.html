@@ -330,6 +330,9 @@
     .meal-type-summary-name{font-size:17px}
     .meal-type-summary-count{font-size:10px;color:#77756f}
     .meal-type-summary-card>div:last-child{margin-top:16px;width:100%}
+    .meal-type-summary-card,.meal-type-summary-card *{text-align:center}
+    .meal-type-summary-top{align-items:center;justify-content:center;text-align:center}
+    .meal-type-summary-bottom{display:flex;flex-direction:column;align-items:center;text-align:center}
     .meal-type-summary-card>div:last-child::before{background:var(--line);margin:0 12px 16px}
     .meal-type-summary-cal{font-size:29px;letter-spacing:-1px}
     .meal-type-summary-cal span{font-size:10px;color:#77756f}
@@ -1074,7 +1077,7 @@ function renderMealTypeSummary(){
     const t=mealTypeTotals(date,type);
     const items=Array.isArray(m?.items)?m.items:[];
     const id=m?.id;
-    return `<div class="meal-type-summary-card" data-type="${type}" ${id!=null?`onclick="viewMeal(${id})"`:''} role="${id!=null?'button':'group'}" tabindex="${id!=null?'0':'-1'}">
+    return `<div class="meal-type-summary-card" data-type="${type}" onclick="${id!=null?`viewMeal(${id})`:`openAddFoodForDiary('${type}','${date}')`}" role="button" tabindex="0">
       <div class="meal-type-summary-top"><div class="meal-type-summary-icon">${mealIcon(type)}</div><div><div class="meal-type-summary-name">${mealTypeLabel(type)}</div><div class="meal-type-summary-count">${items.length} food item${items.length===1?'':'s'}</div></div></div>
       <div class="meal-type-summary-bottom"><div class="meal-type-summary-cal">${Math.round(t.calories)} <span>kcal</span></div><div class="meal-type-summary-macros"><span><b>${Math.round(t.protein)}g</b><em>Protein</em></span><span><b>${Math.round(t.carbs)}g</b><em>Carbs</em></span><span><b>${Math.round(t.fat)}g</b><em>Fat</em></span></div></div>
     </div>`;
@@ -1497,16 +1500,20 @@ function viewMeal(id){
   const m=state.meals.find(x=>Number(x.id)===Number(id));if(!m)return;
   viewedMealId=id;
   const t=mealTotal(m);
-  document.getElementById('mealViewEyebrow').textContent=mealTypeLabel(mealType(m));
-  document.getElementById('mealViewTypeIcon').innerHTML=mealIcon(mealType(m));
-  document.getElementById('mealViewTitle').textContent=m.name||diaryMealName(mealDate(m),mealType(m));
-  document.getElementById('mealViewMeta').textContent=`${fmtDate(new Date((mealDate(m)||localIsoDate())+'T12:00:00'))} · ${mealTypeLabel(mealType(m))}`;
+  const viewDate=mealDate(m)||localIsoDate();
+  const viewType=mealType(m);
+  document.getElementById('mealViewEyebrow').textContent='';
+  document.getElementById('mealViewTypeIcon').innerHTML='';
+  document.getElementById('mealViewTypeIcon').style.display='none';
+  document.getElementById('mealViewTitle').textContent=`${fmtDate(new Date(viewDate+'T12:00:00'))} · ${mealTypeLabel(viewType)}`;
+  document.getElementById('mealViewMeta').textContent='';
+  document.getElementById('mealViewMeta').style.display='none';
   document.getElementById('mealViewTotals').innerHTML=`<div class="meal-view-stat"><strong>${Math.round(t.calories)}</strong><span>kcal</span></div><div class="meal-view-stat"><strong>${Math.round(t.protein)}g</strong><span>Protein</span></div><div class="meal-view-stat"><strong>${Math.round(t.carbs)}g</strong><span>Carbs</span></div><div class="meal-view-stat"><strong>${Math.round(t.fat)}g</strong><span>Fat</span></div>`;
   const items=Array.isArray(m.items)?m.items:[];
   document.getElementById('mealViewFoods').innerHTML=items.length?items.map(i=>`<div class="meal-view-food"><div class="meal-view-food-name">${esc(i.name||'Food item')}</div><div class="meal-view-food-macros"><span>${Math.round(i.calories||0)} <em>kcal</em></span><span>${Math.round(i.protein||0)}g <em>P</em></span><span>${Math.round(i.carbs||0)}g <em>C</em></span><span>${Math.round(i.fat||0)}g <em>F</em></span></div></div>`).join(''):'<div class="empty">No food items in this meal.</div>';
   document.getElementById('mealViewBackdrop').classList.add('open');
 }
-function closeMealView(){document.getElementById('mealViewBackdrop').classList.remove('open');viewedMealId=null}
+function closeMealView(){document.getElementById('mealViewBackdrop').classList.remove('open');document.getElementById('mealViewTypeIcon').style.display='';document.getElementById('mealViewMeta').style.display='';viewedMealId=null}
 function editMealFromView(){if(viewedMealId===null)return;const id=viewedMealId;closeMealView();editMeal(id)}
 function editMeal(id){
   const m=state.meals.find(x=>Number(x.id)===Number(id));if(!m)return;
