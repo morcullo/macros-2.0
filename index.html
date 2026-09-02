@@ -539,7 +539,7 @@
     /* Meal diary redesign */
     .diary-date-nav{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:10px;align-items:center;margin:22px 0 16px}.diary-date-nav .icon-month{width:44px;height:44px}.diary-date-picker{display:block;width:100%;text-align:center}.diary-date-picker .date-pill{display:flex;align-items:center;justify-content:center;min-height:44px;font-weight:750}
     .meal-diary{display:flex;flex-direction:column;gap:14px}.diary-meal-section{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:18px 18px 14px}.diary-meal-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.diary-meal-title{display:flex;align-items:center;gap:11px;min-width:0}.diary-meal-icon{width:42px;height:42px;display:grid;place-items:center;color:var(--orange);flex:0 0 42px}.diary-meal-icon svg{width:38px;height:38px}.diary-meal-title h2{margin:0;text-transform:capitalize;font-size:20px}.diary-meal-title span{display:block;color:var(--muted);font-size:11px;margin-top:3px}.diary-add-btn{padding:9px 13px;border-radius:12px;white-space:nowrap;font-size:13px}.diary-foods{margin-top:14px}.diary-food{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--line);cursor:pointer}.diary-food:first-child{border-top:0}.diary-food-name{font-size:13px;min-width:0}.diary-food-macros{display:flex;gap:9px;color:var(--orange);font-size:10px;white-space:nowrap}.diary-food-macros em{font-style:normal;color:var(--muted);font-size:9px}.diary-empty{padding:13px 0;color:var(--muted);font-size:12px}.diary-meal-total{display:flex;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:2px;padding-top:12px;color:var(--muted);font-size:10px}.diary-meal-total span:first-child{color:var(--text);font-weight:750}.meal-context{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#151412;border:1px solid var(--line);border-radius:16px;margin-bottom:14px}.meal-context-icon{width:42px;height:42px;display:grid;place-items:center;color:var(--orange)}.meal-context-icon svg{width:36px;height:36px}.meal-context strong{font-size:13px}.meal-head-fields,.meal-name-wrap,.reuse-menu{display:none!important}
-    .meal-type-summary-card{aspect-ratio:auto!important;align-items:stretch!important;text-align:left!important;padding:16px!important;cursor:default!important}.meal-type-summary-card:hover{transform:none!important;filter:none!important}.meal-type-summary-top{flex-direction:row!important;align-items:center!important}.meal-type-summary-count{margin-top:3px}.meal-summary-foods{margin:12px 0 4px;min-height:28px}.meal-summary-food{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-top:1px solid rgba(255,255,255,.10);font-size:10px}.meal-summary-food span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.meal-summary-food b{color:var(--orange);font-weight:650;white-space:nowrap}.meal-summary-empty{font-size:10px;color:var(--muted);padding:8px 0}.meal-summary-more{font-size:9px;color:var(--muted);padding-top:3px}.meal-type-summary-bottom{margin-top:10px!important}.meal-type-summary-card .meal-summary-add{align-self:flex-start;margin-top:12px;border:0;background:transparent;color:var(--orange);font-weight:750;padding:4px 0;font-size:11px;cursor:pointer}.meal-type-summary-card>div:last-child::before{display:none!important}
+    .meal-type-summary-card{aspect-ratio:auto!important;align-items:stretch!important;text-align:left!important;padding:16px!important;cursor:default!important}.meal-type-summary-card:hover{transform:none!important;filter:none!important}.meal-type-summary-top{flex-direction:row!important;align-items:center!important}.meal-type-summary-count{margin-top:3px}.meal-type-summary-bottom{margin-top:14px!important}.meal-type-summary-card[role="button"]{cursor:pointer}.meal-type-summary-card[role="button"]:hover{transform:translateY(-1px);filter:brightness(1.04)}
     @media(max-width:540px){.diary-date-nav{grid-template-columns:38px minmax(0,1fr) 38px;gap:7px}.diary-date-nav .icon-month{width:38px;height:40px}.diary-meal-section{padding:15px}.diary-food{align-items:flex-start}.diary-food-macros{gap:6px;font-size:9px}.diary-food-macros em{font-size:8px}.diary-add-btn{padding:8px 10px;font-size:12px}.meal-type-summary-card{padding:14px!important}}
 </style>
 </head>
@@ -567,8 +567,7 @@
         <div class="metric carbs"><div class="eyebrow">Carbs</div><div class="value" id="carbsVal">135g</div><div class="label">of 300g goal</div><div class="bar"><i></i></div></div>
         <div class="metric fat"><div class="eyebrow">Fat</div><div class="value" id="fatVal">41g</div><div class="label">of 90g goal</div><div class="bar"><i></i></div></div>
       </div>
-      <div class="section"><div class="section-head"><div><div class="eyebrow">Latest</div><h2>Today’s meals</h2></div><button class="link" onclick="navigate('meals')">See all →</button></div><div class="card" id="todayMeals"></div></div>
-      <div class="section"><div class="section-head"><div><div class="eyebrow">By meal type</div><h2>Today’s macro summary</h2></div></div><div class="meal-type-summary" id="mealTypeSummary"></div></div>
+      <div class="section"><div class="section-head"><div><div class="eyebrow">Daily breakdown</div><h2>Macros by meal</h2></div></div><div class="meal-type-summary" id="mealTypeSummary"></div></div>
     </section>
 
     <section id="goals" class="view">
@@ -1055,7 +1054,6 @@ function renderDashboard(){
   document.getElementById('ringPct').textContent=Math.round(rawPct)+'%';
   setMetric('protein',t.protein,g.protein);setMetric('carbs',t.carbs,g.carbs);setMetric('fat',t.fat,g.fat);
   const weeklyGoal=document.getElementById('weeklyGoalText'); if(weeklyGoal) weeklyGoal.textContent=g.calories.toLocaleString();
-  renderTodayMeals();
   renderMealTypeSummary();
 }
 function getDiaryMeal(date,type){
@@ -1072,20 +1070,17 @@ function renderMealTypeSummary(){
   const date=isoDate(currentDate);
   const types=['breakfast','lunch','dinner','snack'];
   box.innerHTML=types.map(type=>{
-    const m=getDiaryMeal(date,type), t=mealTypeTotals(date,type);
+    const m=getDiaryMeal(date,type);
+    const t=mealTypeTotals(date,type);
     const items=Array.isArray(m?.items)?m.items:[];
-    const foodHtml=items.length
-      ? items.slice(0,4).map(i=>`<div class="meal-summary-food"><span>${esc(i.name||'Food item')}</span><b>${Math.round(i.calories||0)}</b></div>`).join('')
-      : '<div class="meal-summary-empty">No food logged</div>';
-    const more=items.length>4?`<div class="meal-summary-more">+ ${items.length-4} more</div>`:'';
-    return `<div class="meal-type-summary-card" data-type="${type}">
-      <div class="meal-type-summary-top"><div class="meal-type-summary-icon">${mealIcon(type)}</div><div><div class="meal-type-summary-name">${type}</div><div class="meal-type-summary-count">${items.length} food item${items.length===1?'':'s'}</div></div></div>
-      <div class="meal-summary-foods">${foodHtml}${more}</div>
+    const id=m?.id;
+    return `<div class="meal-type-summary-card" data-type="${type}" ${id!=null?`onclick="viewMeal(${id})"`:''} role="${id!=null?'button':'group'}" tabindex="${id!=null?'0':'-1'}">
+      <div class="meal-type-summary-top"><div class="meal-type-summary-icon">${mealIcon(type)}</div><div><div class="meal-type-summary-name">${mealTypeLabel(type)}</div><div class="meal-type-summary-count">${items.length} food item${items.length===1?'':'s'}</div></div></div>
       <div class="meal-type-summary-bottom"><div class="meal-type-summary-cal">${Math.round(t.calories)} <span>kcal</span></div><div class="meal-type-summary-macros"><span><b>${Math.round(t.protein)}g</b><em>Protein</em></span><span><b>${Math.round(t.carbs)}g</b><em>Carbs</em></span><span><b>${Math.round(t.fat)}g</b><em>Fat</em></span></div></div>
-      <button type="button" class="meal-summary-add" onclick="openAddFoodForDiary('${type}','${date}')">＋ Add food</button>
     </div>`;
   }).join('');
 }
+
 function openMealTypeModal(type){openAddFoodForDiary(type,isoDate(currentDate))}
 function closeMealTypeModal(){document.getElementById('mealTypeModalBackdrop')?.classList.remove('open')}
 function renderTodayMeals(){
