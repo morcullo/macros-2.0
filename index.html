@@ -19,8 +19,9 @@
     html{touch-action:pan-x pan-y;overscroll-behavior-y:none}
     body{touch-action:pan-x pan-y}
     input,textarea,select{font-size:16px}
+    .initial-loading{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:24px}.initial-loading-card{width:min(360px,100%);text-align:center}.initial-loading-brand{display:flex;align-items:center;justify-content:center;gap:11px;font-weight:800;font-size:22px;letter-spacing:-.7px;margin-bottom:28px}.initial-loading-brand-mark{width:42px;height:42px;border:2px solid var(--orange);border-radius:13px;display:grid;place-items:center;color:var(--orange)}.initial-loading-brand-mark svg{width:23px;height:23px}.initial-loading-spinner{width:64px;height:64px;margin:0 auto 18px;display:grid;place-items:center;animation:dumbbell-bounce 1s ease-in-out infinite}.initial-loading-spinner svg{width:52px;height:52px;display:block;stroke:var(--orange);stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}@keyframes dumbbell-bounce{0%,100%{transform:rotate(-8deg) scale(1)}50%{transform:rotate(8deg) scale(1.06)}}.initial-loading-title{font-size:18px;font-weight:800;margin-bottom:6px}.initial-loading-text{font-size:13px;color:var(--muted);line-height:1.5}.initial-loading-error{display:none;color:var(--red);font-size:13px;line-height:1.5;margin-top:14px}.initial-loading.retry .initial-loading-spinner{display:none}.initial-loading.retry .initial-loading-error{display:block}.initial-loading.retry .initial-loading-text{display:none}.initial-loading-retry{display:none;margin:18px auto 0;border:1px solid var(--orange);background:var(--orange);color:#11100f;border-radius:13px;padding:10px 18px;font-weight:800}.initial-loading.retry .initial-loading-retry{display:block}.app.initial-loading-hidden{visibility:hidden}.app.initial-loading-ready{visibility:visible}
     .pull-refresh{position:fixed;top:10px;left:50%;transform:translate(-50%,-70px);z-index:100;background:#24221f;border:1px solid var(--orange);color:var(--orange);border-radius:999px;padding:8px 14px;font-size:12px;font-weight:800;opacity:0;transition:.2s;pointer-events:none}.pull-refresh.show{transform:translate(-50%,0);opacity:1}.pull-refresh .spinner{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,184,28,.25);border-top-color:var(--orange);border-radius:50%;vertical-align:-2px;margin-right:6px;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
-    .date-picker-wrap{position:relative;display:inline-flex}.date-picker-wrap input{position:absolute;inset:0;width:100%;height:100%;opacity:.01;cursor:pointer;z-index:2;margin:0;padding:0;border:0}.date-picker-wrap .date-pill{position:relative;z-index:1}
+    .date-picker-wrap{position:relative;display:inline-flex;z-index:1}.date-picker-wrap input{position:absolute;inset:0;width:100%;height:100%;opacity:.01;cursor:pointer;z-index:2;margin:0;padding:0;border:0}.date-picker-wrap .date-pill{position:relative;z-index:1}
     .meal-date-time{display:block;width:100%!important;max-width:none!important;min-width:0;box-sizing:border-box;appearance:none;-webkit-appearance:none}
     .goal-card.shape-1:after{transform:rotate(45deg);border-radius:20px}.goal-card.shape-2:after{transform:rotate(0deg);border-radius:50%;width:150px;height:150px}.goal-card.shape-3:after{transform:rotate(30deg);border-radius:8px;width:170px;height:170px}.goal-card.shape-4:after{transform:rotate(60deg);border-radius:50% 12px 50% 12px;width:160px;height:160px}
     .modal-actions .danger{border:1px solid #6b3028;background:#2d1714;color:#ff8f7d;border-radius:13px;padding:0;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-right:auto;flex:0 0 44px;line-height:0}.modal-actions .icon-action{width:44px;height:44px;padding:0;display:flex;align-items:center;justify-content:center;line-height:0}.modal-actions .icon-action svg{width:20px;height:20px;display:block;flex:0 0 auto;margin:0}
@@ -42,7 +43,7 @@
     h3{margin:0;font-size:17px}
     .sub{color:var(--muted);margin:0}
     .date-row{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:22px 0}
-    .date-nav{display:flex;align-items:center;gap:8px}
+    .date-nav{display:flex;align-items:center;gap:8px;position:relative;z-index:3}.date-nav>button{position:relative;z-index:4}
     .date-nav button{border:1px solid var(--line);background:var(--panel);color:var(--text);width:38px;height:38px;border-radius:12px}
     .date-pill{background:var(--panel);border:1px solid var(--line);padding:9px 13px;border-radius:12px;font-weight:700}
     .hero{position:relative;overflow:hidden;border:1px solid #3a3324;background:linear-gradient(135deg,#1b1916 0%,#171615 62%,#211b10 100%);border-radius:28px;padding:28px;box-shadow:var(--shadow)}
@@ -330,6 +331,9 @@
     .meal-type-summary-name{font-size:17px}
     .meal-type-summary-count{font-size:10px;color:#77756f}
     .meal-type-summary-card>div:last-child{margin-top:16px;width:100%}
+    .meal-type-summary-card,.meal-type-summary-card *{text-align:center}
+    .meal-type-summary-top{align-items:center;justify-content:center;text-align:center}
+    .meal-type-summary-bottom{display:flex;flex-direction:column;align-items:center;text-align:center}
     .meal-type-summary-card>div:last-child::before{background:var(--line);margin:0 12px 16px}
     .meal-type-summary-cal{font-size:29px;letter-spacing:-1px}
     .meal-type-summary-cal span{font-size:10px;color:#77756f}
@@ -535,10 +539,16 @@
     /* v74.1: clearer macro goal readouts */
     .metric .value{white-space:nowrap}
     .metric .label{line-height:1.35}
+
+    /* Meal diary redesign */
+    .diary-date-nav{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:10px;align-items:center;margin:22px 0 16px}.diary-date-nav .icon-month{width:44px;height:44px}.diary-date-picker{display:block;width:100%;text-align:center}.diary-date-picker .date-pill{display:flex;align-items:center;justify-content:center;min-height:44px;font-weight:750}
+    .meal-diary{display:flex;flex-direction:column;gap:14px}.diary-meal-section{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:18px 18px 14px}.diary-meal-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.diary-meal-title{display:flex;align-items:center;gap:11px;min-width:0}.diary-meal-icon{width:42px;height:42px;display:grid;place-items:center;color:var(--orange);flex:0 0 42px}.diary-meal-icon svg{width:38px;height:38px}.diary-meal-title h2{margin:0;text-transform:capitalize;font-size:20px}.diary-meal-title span{display:block;color:var(--muted);font-size:11px;margin-top:3px}.diary-meal-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto}.diary-action-btn{width:40px;height:40px;padding:0;border-radius:12px;display:grid;place-items:center;line-height:0}.diary-action-btn svg{width:19px;height:19px;display:block}.diary-action-btn:hover{filter:brightness(1.06)}.diary-foods{margin-top:14px}.diary-food{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--line);cursor:pointer}.diary-food:first-child{border-top:0}.diary-food-name{font-size:13px;min-width:0}.diary-food-macros{display:flex;gap:9px;color:var(--orange);font-size:10px;white-space:nowrap}.diary-food-macros em{font-style:normal;color:var(--muted);font-size:9px}.diary-empty{padding:13px 0;color:var(--muted);font-size:12px}.diary-meal-total{display:flex;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:2px;padding-top:12px;color:var(--muted);font-size:10px}.diary-meal-total span:first-child{color:var(--text);font-weight:750}.meal-context{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#151412;border:1px solid var(--line);border-radius:16px;margin-bottom:14px}.meal-context-icon{width:42px;height:42px;display:grid;place-items:center;color:var(--orange)}.meal-context-icon svg{width:36px;height:36px}.meal-context strong{font-size:13px}.meal-head-fields,.meal-name-wrap,.reuse-menu{display:none!important}
+    .meal-type-summary-card{aspect-ratio:auto!important;align-items:stretch!important;text-align:left!important;padding:16px!important;cursor:default!important}.meal-type-summary-card:hover{transform:none!important;filter:none!important}.meal-type-summary-top{flex-direction:row!important;align-items:center!important}.meal-type-summary-count{margin-top:3px}.meal-type-summary-bottom{margin-top:14px!important}.meal-type-summary-card[role="button"]{cursor:pointer}.meal-type-summary-card[role="button"]:hover{transform:translateY(-1px);filter:brightness(1.04)}
+    @media(max-width:540px){.diary-date-nav{grid-template-columns:38px minmax(0,1fr) 38px;gap:7px}.diary-date-nav .icon-month{width:38px;height:40px}.diary-meal-section{padding:15px}.diary-food{align-items:flex-start}.diary-food-macros{gap:6px;font-size:9px}.diary-food-macros em{font-size:8px}.diary-action-btn{width:38px;height:38px}.diary-action-btn svg{width:18px;height:18px}.meal-type-summary-card{padding:14px!important}}
 </style>
 </head>
-<body><div class="pull-refresh" id="pullRefresh"><span class="spinner"></span>Refreshing…</div>
-<div class="app">
+<body><div class="initial-loading" id="initialLoading" aria-live="polite"><div class="initial-loading-card"><div class="initial-loading-brand"><div class="initial-loading-brand-mark" aria-label="Macros app icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8v8M4.5 9.5v5M2.5 11v2M17 8v8M19.5 9.5v5M21.5 11v2M7 12h10"/></svg></div><span>Macros</span></div><div class="initial-loading-spinner" aria-label="Loading"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8v8M4.5 9.5v5M2.5 11v2M17 8v8M19.5 9.5v5M21.5 11v2M7 12h10"/></svg></div><div class="initial-loading-title">Loading your data</div><div class="initial-loading-text">Getting your latest data from the cloud…</div><div class="initial-loading-error" id="initialLoadingError">We couldn’t load your data from the cloud. Please try again.</div><button type="button" class="initial-loading-retry" onclick="retryInitialLoad()">Try again</button></div></div><div class="pull-refresh" id="pullRefresh"><span class="spinner"></span>Refreshing…</div>
+<div class="app initial-loading-hidden">
   <header class="topbar">
     <div class="brand"><div class="brand-mark" aria-label="Macros app icon"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8v8M4.5 9.5v5M2.5 11v2M17 8v8M19.5 9.5v5M21.5 11v2M7 12h10"/></svg></div><span>Macros</span></div>
   </header>
@@ -561,8 +571,7 @@
         <div class="metric carbs"><div class="eyebrow">Carbs</div><div class="value" id="carbsVal">135g</div><div class="label">of 300g goal</div><div class="bar"><i></i></div></div>
         <div class="metric fat"><div class="eyebrow">Fat</div><div class="value" id="fatVal">41g</div><div class="label">of 90g goal</div><div class="bar"><i></i></div></div>
       </div>
-      <div class="section"><div class="section-head"><div><div class="eyebrow">Latest</div><h2>Today’s meals</h2></div><button class="link" onclick="navigate('meals')">See all →</button></div><div class="card" id="todayMeals"></div></div>
-      <div class="section"><div class="section-head"><div><div class="eyebrow">By meal type</div><h2>Today’s macro summary</h2></div></div><div class="meal-type-summary" id="mealTypeSummary"></div></div>
+      <div class="section"><div class="section-head"><div><div class="eyebrow">Daily breakdown</div><h2>Macros by meal</h2></div></div><div class="meal-type-summary" id="mealTypeSummary"></div></div>
     </section>
 
     <section id="goals" class="view">
@@ -586,9 +595,13 @@
     </section>
 
     <section id="meals" class="view">
-      <div class="eyebrow">Your food history</div><h1>All meals</h1><p class="sub">Every meal, ingredient and macro in one place.</p>
-      <div class="meals-toolbar"><input class="search" id="mealSearch" oninput="renderMeals()" placeholder="Search meals or ingredients…"><select class="filter" id="mealTypeFilter" onchange="renderMeals()" aria-label="Filter by meal type"><option value="all">All meal types</option><option value="breakfast">Breakfast</option><option value="lunch">Lunch</option><option value="dinner">Dinner</option><option value="snack">Snack</option></select></div>
-      <div class="full-meals" id="allMeals"></div>
+      <div class="eyebrow">Daily food history</div><h1>Meal diary</h1><p class="sub">Everything you ate, grouped by meal.</p>
+      <div class="diary-date-nav">
+        <button type="button" class="icon-month" onclick="shiftDiaryDay(-1)" aria-label="Previous day">‹</button>
+        <div class="date-picker-wrap diary-date-picker"><div class="date-pill" id="diaryDateLabel" role="button" tabindex="0">Sep 2, 2026</div><input id="diaryDatePicker" type="date" aria-label="Choose diary date"></div>
+        <button type="button" class="icon-month" onclick="shiftDiaryDay(1)" aria-label="Next day">›</button>
+      </div>
+      <div class="meal-diary" id="mealDiary"></div>
     </section>
   </main>
 
@@ -597,18 +610,19 @@
     <button class="nav-item" data-view="goals" onclick="navigate('goals')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5"/><path d="m17 7 2-2"/></svg><span>Goals</span></button>
     <button class="nav-item add" onclick="openModal()" title="Add meal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M12 5v14M5 12h14"/></svg></button>
     <button class="nav-item" data-view="weight" onclick="navigate('weight')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V8"/><path d="M4 19h16"/><path d="m7 15 3-4 3 2 5-7"/><circle cx="7" cy="15" r="1"/><circle cx="10" cy="11" r="1"/></svg><span>Weight</span></button>
-    <button class="nav-item" data-view="meals" onclick="navigate('meals')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/><path d="M17 16h2"/></svg><span>Meals</span></button>
+    <button class="nav-item" data-view="meals" onclick="navigate('meals')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/><path d="M17 16h2"/></svg><span>Diary</span></button>
   </nav>
 </div>
 
 <div class="modal-backdrop" id="modalBackdrop" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-head"><div><div class="eyebrow" id="modalEyebrow">Log nutrition</div><h2 id="modalTitle">Add meal</h2></div><button class="close" onclick="closeModal()">×</button></div>
-    <div class="meal-head-fields">
-      <div class="field meal-name-wrap"><label>Meal name</label><div class="meal-name-display-row" id="mealNameDisplayRow"><div class="meal-name-display" id="mealNameDisplay"></div><button type="button" class="secondary mini-edit" id="mealNameEditBtn" onclick="setMealNameEditing(true)" aria-label="Edit meal name" title="Edit meal name">Edit</button></div><div class="meal-name-input-wrap" id="mealNameInputWrap" style="display:none"><input id="mealName" autocomplete="off" placeholder="e.g. 08/31 - Lunch" oninput="handleMealNameInput()" onfocus="renderReuseOptions()"><button type="button" id="mealNameClear" class="meal-name-clear" onclick="clearMealName()" aria-label="Clear meal name" title="Clear meal name">×</button></div><div class="reuse-menu" id="reuseMenu"></div></div>
-      <div class="field"><label>Meal date</label><input id="mealDateTime" class="meal-date-time" type="date"></div>
+    <div class="meal-context">
+      <div class="meal-context-icon" id="modalMealTypeIcon"></div>
+      <div><div class="eyebrow" id="modalMealTypeLabel">Snack</div><strong id="modalMealDateLabel">September 2, 2026</strong></div>
     </div>
-    <div class="field meal-type-label"><label>Meal type</label><div class="meal-type-buttons" id="mealTypeButtons"><button type="button" class="meal-type-btn" data-type="breakfast" onclick="selectMealType('breakfast')">Breakfast</button><button type="button" class="meal-type-btn" data-type="lunch" onclick="selectMealType('lunch')">Lunch</button><button type="button" class="meal-type-btn" data-type="dinner" onclick="selectMealType('dinner')">Dinner</button><button type="button" class="meal-type-btn" data-type="snack" onclick="selectMealType('snack')">Snack</button></div></div>
+    <div class="field meal-type-label"><label>Meal</label><div class="meal-type-buttons" id="mealTypeButtons"><button type="button" class="meal-type-btn" data-type="breakfast" onclick="selectMealType('breakfast')">Breakfast</button><button type="button" class="meal-type-btn" data-type="lunch" onclick="selectMealType('lunch')">Lunch</button><button type="button" class="meal-type-btn" data-type="dinner" onclick="selectMealType('dinner')">Dinner</button><button type="button" class="meal-type-btn" data-type="snack" onclick="selectMealType('snack')">Snack</button></div></div>
+    <input id="mealName" type="hidden"><input id="mealDateTime" type="hidden">
     <div class="food-list" id="foodList"></div>
     <button class="secondary" onclick="addFoodRow()">＋ Add food item</button>
     <div class="modal-actions"><button class="danger icon-action" id="deleteMealBtn" onclick="deleteEditingMeal()" style="display:none" aria-label="Delete meal" title="Delete meal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg></button><button class="secondary" onclick="closeModal()">Cancel</button><button class="primary icon-action" id="saveMealBtn" onclick="saveMeal()" aria-label="Save meal" title="Save meal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h12l2 2v14H5z"/><path d="M8 4v6h8V4M9 20v-6h6v6"/></svg></button></div>
@@ -704,6 +718,37 @@ function normalizeStateData(){
   state.foodLibrary=Array.isArray(state.foodLibrary)?state.foodLibrary.filter(f=>f&&String(f.name||'').trim()):[];
   state._deletedMealIds=[...new Set((state._deletedMealIds||[]).map(Number).filter(Number.isFinite))];
 }
+function migrateMealsToDiary(){
+  const source=Array.isArray(state.meals)?state.meals:[];
+  const groups=new Map();
+  const deleted=new Set((state._deletedMealIds||[]).map(Number));
+  let changed=false;
+  const undated=[];
+  source.forEach(m=>{
+    const date=mealDate(m);
+    const type=mealType(m);
+    if(!date||!type){undated.push(m);return;}
+    const key=`${date}|${type}`;
+    const existing=groups.get(key);
+    if(!existing){groups.set(key,{...m,date,mealType:type,items:Array.isArray(m.items)?m.items.slice():[]});return;}
+    const existingUpdated=Number(existing.updatedAt||existing.createdAt||0);
+    const incomingUpdated=Number(m.updatedAt||m.createdAt||0);
+    // Keep the oldest record as the stable canonical ID, then combine all food.
+    if(Number(m.id)!==Number(existing.id))deleted.add(Number(m.id));
+    existing.items=existing.items.concat(Array.isArray(m.items)?m.items:[]);
+    existing.updatedAt=Math.max(existingUpdated,incomingUpdated);
+    if(incomingUpdated>existingUpdated && !existing.name)existing.name=m.name;
+    changed=true;
+  });
+  if(changed){
+    state.meals=[...groups.values()];
+    state._deletedMealIds=[...deleted].filter(Number.isFinite);
+  }else{
+    state.meals=[...groups.values()];
+  }
+  state.meals.forEach(m=>{m.name=diaryMealName(mealDate(m),mealType(m));});
+  return changed;
+}
 normalizeStateData();
 
 function mergeFoodLibraries(local,remote){
@@ -757,6 +802,7 @@ function applyState(incoming){
   state._deletedMealIds=merged._deletedMealIds;
   state._updatedAt=merged._updatedAt;
   normalizeStateData();
+  migrateMealsToDiary();
 }
 function setSyncStatus(text, cls=''){const el=document.getElementById('syncStatus');if(el){el.textContent=text;el.className='sync-status '+cls}}
 function updateSyncUI(){if(sheetSyncUrl)setSyncStatus('Google Sheets is the only data source.','connected')}
@@ -766,28 +812,51 @@ function notifyRemoteLoad(incoming){
   const waiters=remoteLoadWaiters.splice(0);
   waiters.forEach(fn=>{try{fn(incoming||null)}catch(err){console.error(err)}});
 }
+function finishInitialLoading(success){
+  const overlay=document.getElementById('initialLoading');
+  const app=document.querySelector('.app');
+  if(!overlay||!app)return;
+  if(success){
+    overlay.remove();
+    app.classList.remove('initial-loading-hidden');
+    app.classList.add('initial-loading-ready');
+  }else{
+    overlay.classList.add('retry');
+  }
+}
+function retryInitialLoad(){
+  const overlay=document.getElementById('initialLoading');
+  if(overlay)overlay.classList.remove('retry');
+  if(sheetSyncUrl)loadFromSheet(false);
+  else finishInitialLoading(false);
+}
 function loadFromSheet(showToastOnSuccess=false,afterLoad=null){
   if(!sheetSyncUrl){setSyncStatus('Google Sheets URL is not configured.','error');if(afterLoad)afterLoad(null);return;}
   if(remoteLoadInFlight){if(afterLoad)remoteLoadWaiters.push(afterLoad);return;}
-  remoteLoadInFlight=true;setSyncStatus('Loading from Google Sheets…');
+  remoteLoadInFlight=true;setSyncStatus('Loading from the cloud…');
   const callback='__macroSheetCb_'+Date.now();
   window[callback]=(incoming)=>{
     let result=incoming||null;
     try{
       delete window[callback];
       if(incoming&&Array.isArray(incoming.meals)){
-        applyState(incoming); appDataLoaded=true; refreshUI();
+        const beforeMeals=JSON.stringify(incoming.meals);
+        applyState(incoming); appDataLoaded=true; refreshUI(); finishInitialLoading(true);
         lastLocalMutation=Math.max(lastLocalMutation,Number(incoming._updatedAt||0));
-        setSyncStatus('Connected — data loaded from Google Sheets.','connected');
+        setSyncStatus('Connected — data loaded from the cloud.','connected');
+        if(beforeMeals!==JSON.stringify(state.meals)){
+          persist();
+          showToast('Meal diary updated');
+        }
         if(showToastOnSuccess)showToast('Google Sheet connected');
       }else if(incoming&&incoming.__empty){
         state.meals=[];state.weights=[];state.foodLibrary=[];state._deletedMealIds=[];
-        state._updatedAt=Number(incoming._updatedAt||0); appDataLoaded=true; refreshUI();
-        setSyncStatus('Connected — Google Sheet is empty.','connected');
+        state._updatedAt=Number(incoming._updatedAt||0); appDataLoaded=true; refreshUI(); finishInitialLoading(true);
+        setSyncStatus('Connected — the cloud has no saved data yet.','connected');
       }else throw new Error('The sheet response was not valid app data.');
     }catch(err){
       console.error(err); result=null;
-      setSyncStatus('Could not read the Google Sheet.','error');
+      setSyncStatus('Could not load your data from the cloud.','error'); finishInitialLoading(false);
     }finally{
       remoteLoadInFlight=false;
       if(afterLoad)remoteLoadWaiters.push(afterLoad);
@@ -798,6 +867,7 @@ function loadFromSheet(showToastOnSuccess=false,afterLoad=null){
   script.src=sheetSyncUrl+'?callback='+encodeURIComponent(callback)+'&t='+Date.now();
   script.onerror=()=>{
     delete window[callback]; remoteLoadInFlight=false;
+    finishInitialLoading(false);
     setSyncStatus('Could not connect. Check the deployment URL and access setting.','error');
     if(afterLoad)remoteLoadWaiters.push(afterLoad);
     notifyRemoteLoad(null);
@@ -861,7 +931,7 @@ async function syncToSheet(force=false){
     _deletedMealIds:state._deletedMealIds,_updatedAt:lastLocalMutation
   }));
   if(syncInFlight){syncQueued=true;return;}
-  syncInFlight=true;setSyncStatus('Syncing with Google Sheets…');
+  syncInFlight=true;setSyncStatus('Syncing with the cloud…');
   try{
     const remoteBefore=await loadFromSheetAsync(false);
     if(remoteBefore){
@@ -883,10 +953,10 @@ async function syncToSheet(force=false){
       if(!confirmed&&attempt<3)await syncDelay(500*attempt);
     }
     if(!confirmed)throw new Error('Google Sheets write was not confirmed after retrying.');
-    setSyncStatus('Connected — changes synced to Google Sheets.','connected');
+    setSyncStatus('Connected — changes synced to the cloud.','connected');
   }catch(err){
     console.error('Google Sheets sync failed:',err);
-    setSyncStatus('Google Sheets sync failed — retrying…','error');
+    setSyncStatus('Cloud sync failed — retrying…','error');
     if(!syncQueued){syncQueued=true;setTimeout(()=>{syncQueued=false;syncToSheet(true)},2500);}
   }finally{
     syncInFlight=false;
@@ -930,6 +1000,7 @@ function mealDate(m){
   return '';
 }
 function fmtDate(d){return d.toLocaleDateString(undefined,{month:'short',day:'numeric'})}
+function fmtDateLong(d){return d.toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'})}
 function navigate(view){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById(view).classList.add('active');
@@ -1006,12 +1077,15 @@ function renderDashboard(){
   document.getElementById('ringPct').textContent=Math.round(rawPct)+'%';
   setMetric('protein',t.protein,g.protein);setMetric('carbs',t.carbs,g.carbs);setMetric('fat',t.fat,g.fat);
   const weeklyGoal=document.getElementById('weeklyGoalText'); if(weeklyGoal) weeklyGoal.textContent=g.calories.toLocaleString();
-  renderTodayMeals();
   renderMealTypeSummary();
 }
+function getDiaryMeal(date,type){
+  return (Array.isArray(state.meals)?state.meals:[]).find(m=>mealDate(m)===date && mealType(m)===type)||null;
+}
 function mealTypeTotals(date,type){
-  const meals=(Array.isArray(state.meals)?state.meals:[]).filter(m=>mealDate(m)===date && mealType(m)===type);
-  return meals.reduce((a,m)=>{const t=mealTotal(m);a.calories+=t.calories;a.protein+=t.protein;a.carbs+=t.carbs;a.fat+=t.fat;return a;},{calories:0,protein:0,carbs:0,fat:0,count:meals.length});
+  const m=getDiaryMeal(date,type);
+  const t=m?mealTotal(m):{calories:0,protein:0,carbs:0,fat:0};
+  return {...t,count:m?1:0};
 }
 function renderMealTypeSummary(){
   const box=document.getElementById('mealTypeSummary');
@@ -1019,26 +1093,19 @@ function renderMealTypeSummary(){
   const date=isoDate(currentDate);
   const types=['breakfast','lunch','dinner','snack'];
   box.innerHTML=types.map(type=>{
+    const m=getDiaryMeal(date,type);
     const t=mealTypeTotals(date,type);
-    return `<button type="button" class="meal-type-summary-card" data-type="${type}" onclick="openMealTypeModal('${type}')" aria-label="View ${type} meals for ${fmtDate(currentDate)}">
-      <div class="meal-type-summary-top"><div class="meal-type-summary-icon">${mealIcon(type)}</div><div><div class="meal-type-summary-name">${type}</div><div class="meal-type-summary-count">${t.count} meal${t.count===1?'':'s'}</div></div></div>
-      <div><div class="meal-type-summary-cal">${Math.round(t.calories)} <span>kcal</span></div><div class="meal-type-summary-macros"><span><b>${Math.round(t.protein)}g</b><em>Protein</em></span><span><b>${Math.round(t.carbs)}g</b><em>Carbs</em></span><span><b>${Math.round(t.fat)}g</b><em>Fat</em></span></div></div>
-    </button>`;
+    const items=Array.isArray(m?.items)?m.items:[];
+    const id=m?.id;
+    return `<div class="meal-type-summary-card" data-type="${type}" onclick="${id!=null?`viewMeal(${id})`:`openAddFoodForDiary('${type}','${date}')`}" role="button" tabindex="0">
+      <div class="meal-type-summary-top"><div class="meal-type-summary-icon">${mealIcon(type)}</div><div><div class="meal-type-summary-name">${mealTypeLabel(type)}</div><div class="meal-type-summary-count">${items.length} food item${items.length===1?'':'s'}</div></div></div>
+      <div class="meal-type-summary-bottom"><div class="meal-type-summary-cal">${Math.round(t.calories)} <span>kcal</span></div><div class="meal-type-summary-macros"><span><b>${Math.round(t.protein)}g</b><em>Protein</em></span><span><b>${Math.round(t.carbs)}g</b><em>Carbs</em></span><span><b>${Math.round(t.fat)}g</b><em>Fat</em></span></div></div>
+    </div>`;
   }).join('');
 }
-function openMealTypeModal(type){
-  const date=isoDate(currentDate);
-  const meals=(Array.isArray(state.meals)?state.meals:[]).filter(m=>mealDate(m)===date && mealType(m)===type).sort((a,b)=>String(a.name||'').localeCompare(String(b.name||'')));
-  const t=mealTypeTotals(date,type);
-  document.getElementById('mealTypeModalEyebrow').textContent=type;
-  document.getElementById('mealTypeModalTitle').textContent=`${type.charAt(0).toUpperCase()+type.slice(1)} meals`;
-  document.getElementById('mealTypeModalMeta').textContent=`${fmtDate(currentDate)} · ${t.count} meal${t.count===1?'':'s'} · ${Math.round(t.calories)} kcal · ${Math.round(t.protein)}g P · ${Math.round(t.carbs)}g C · ${Math.round(t.fat)}g F`;
-  const list=document.getElementById('mealTypeModalList');
-  list.innerHTML=meals.length?meals.map(mealRow).join(''):`<div class="empty">No ${type} meals logged for this day.</div>`;
-  document.getElementById('mealTypeModalBackdrop').classList.add('open');
-  list.scrollTop=0;
-}
-function closeMealTypeModal(){document.getElementById('mealTypeModalBackdrop').classList.remove('open')}
+
+function openMealTypeModal(type){openAddFoodForDiary(type,isoDate(currentDate))}
+function closeMealTypeModal(){document.getElementById('mealTypeModalBackdrop')?.classList.remove('open')}
 function renderTodayMeals(){
   const box=document.getElementById('todayMeals');
   if(!box)return;
@@ -1102,49 +1169,45 @@ function formatMealGroupDate(dateKey){
   }
   return dateKey;
 }
-const mealGroupOpenState={};
 function renderMeals(){
-  const searchEl=document.getElementById('mealSearch');
-  const filterEl=document.getElementById('mealTypeFilter');
-  const q=(searchEl?searchEl.value:'').toLowerCase().trim();
-  const type=(filterEl?filterEl.value:'all').toLowerCase();
-  const filtered=state.meals.filter(function(m){
-    const matchesType=(mealType(m)===type||type==='all');
-    const matchesSearch=(m.name||'').toLowerCase().includes(q)||((m.items||[]).some(function(i){return (i.name||'').toLowerCase().includes(q)}));
-    return matchesType&&matchesSearch;
-  }).slice().sort(function(a,b){
-    const ad=mealDate(a)||'0000-00-00', bd=mealDate(b)||'0000-00-00';
-    if(ad!==bd)return bd.localeCompare(ad);
-    return String(a.name||'').localeCompare(String(b.name||''));
-  });
-  const container=document.getElementById('allMeals');
+  const container=document.getElementById('mealDiary');
   if(!container)return;
-  if(!filtered.length){container.innerHTML='<div class="empty">No meals match your search.</div>';return;}
-  const groups=[];
-  const byDate={};
-  filtered.forEach(function(m){
-    const key=mealDate(m)||'undated';
-    if(!byDate[key]){byDate[key]=[];groups.push({key:key,meals:byDate[key]});}
-    byDate[key].push(m);
-  });
-  container.innerHTML=groups.map(function(group){
-    const label=formatMealGroupDate(group.key==='undated'?'':group.key);
-    return '<details class="meal-date-group" data-date="'+esc(group.key)+'"'+(mealGroupOpenState[group.key]===true?' open':'')+'><summary class="meal-date-heading">'+esc(label)+'<span class="meal-date-count">'+group.meals.length+' meal'+(group.meals.length===1?'':'s')+'</span></summary><div class="meal-group-meals">'+group.meals.map(function(m){
-      const t=mealTotal(m);
-      return '<div class="meal-detail meal-clickable" onclick="viewMeal('+m.id+')">'+mealVisual(m)+'<div><strong>'+esc(m.name)+'<span class="meal-type-chip">'+mealType(m)+'</span></strong><div class="macros"><span><b>'+Math.round(t.protein)+'g</b> P</span><span><b>'+Math.round(t.carbs)+'g</b> C</span><span><b>'+Math.round(t.fat)+'g</b> F</span></div></div><div class="meal-kcal">'+Math.round(t.calories)+' <small>kcal</small></div></div>';
-    }).join('')+'</div></details>';
+  const date=isoDate(currentDate);
+  const label=document.getElementById('diaryDateLabel'); if(label)label.textContent=fmtDateLong(currentDate);
+  const picker=document.getElementById('diaryDatePicker'); if(picker)picker.value=date;
+  const types=['breakfast','lunch','dinner','snack'];
+  container.innerHTML=types.map(type=>{
+    const m=getDiaryMeal(date,type);
+    const items=Array.isArray(m?.items)?m.items:[];
+    const t=m?mealTotal(m):{calories:0,protein:0,carbs:0,fat:0};
+    const foods=items.length
+      ? items.map((i,idx)=>`<div class="diary-food" onclick="editFoodInDiary('${type}',${idx})">
+          <div class="diary-food-name">${esc(i.name||'Food item')}</div>
+          <div class="diary-food-macros"><span>${Math.round(i.calories||0)} <em>kcal</em></span><span>${Math.round(i.protein||0)}g <em>P</em></span><span>${Math.round(i.carbs||0)}g <em>C</em></span><span>${Math.round(i.fat||0)}g <em>F</em></span></div>
+        </div>`).join('')
+      : '<div class="diary-empty">Nothing logged yet.</div>';
+    return `<section class="diary-meal-section" data-type="${type}">
+      <div class="diary-meal-head">
+        <div class="diary-meal-title"><div class="diary-meal-icon">${mealIcon(type)}</div><div><h2>${type}</h2><span>${items.length} food item${items.length===1?'':'s'}</span></div></div>
+        <div class="diary-meal-actions">
+          <button type="button" class="secondary diary-action-btn" onclick="${m ? `editMeal(${m.id})` : `openAddFoodForDiary('${type}','${date}')`}" aria-label="Edit ${type}" title="Edit ${type}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="diary-foods">${foods}</div>
+      <div class="diary-meal-total"><span>${Math.round(t.calories)} kcal</span><span>${Math.round(t.protein)}g P</span><span>${Math.round(t.carbs)}g C</span><span>${Math.round(t.fat)}g F</span></div>
+    </section>`;
   }).join('');
-  container.querySelectorAll('.meal-date-group').forEach(function(detail){
-    var key=detail.getAttribute('data-date') || '';
-    detail.addEventListener('toggle',function(){
-      if(key) mealGroupOpenState[key]=detail.open;
-    });
-  });
 }
-
+function shiftDiaryDay(n){currentDate.setDate(currentDate.getDate()+n);renderMeals();renderDashboard()}
+function editFoodInDiary(type,index){
+  const m=getDiaryMeal(isoDate(currentDate),type);if(!m||!m.items[index])return;
+  openAddFoodForDiary(type,isoDate(currentDate),index);
+}
 let goalsDirty=false;
 function loadGoals(){if(goalsDirty)return;for(const k of ['calories','protein','carbs','fat']){const el=document.getElementById('goal'+k[0].toUpperCase()+k.slice(1));if(el)el.value=state.goals[k]}}
-function saveGoals(){if(!appDataLoaded){showToast('Waiting for Google Sheets to load');return;}for(const k of ['calories','protein','carbs','fat']){const el=document.getElementById('goal'+k[0].toUpperCase()+k.slice(1));if(el)state.goals[k]=Math.max(1,+el.value||state.goals[k]);}goalsDirty=false;persist();renderDashboard();showToast('Goals saved')}
+function saveGoals(){if(!appDataLoaded){showToast('Waiting for the cloud to load');return;}for(const k of ['calories','protein','carbs','fat']){const el=document.getElementById('goal'+k[0].toUpperCase()+k.slice(1));if(el)state.goals[k]=Math.max(1,+el.value||state.goals[k]);}goalsDirty=false;persist();renderDashboard();showToast('Goals saved')}
 function markGoalsDirty(){goalsDirty=true}
 function weightDateKey(w){
   const raw=String(w?.date||'').trim();
@@ -1218,19 +1281,16 @@ function deleteEditingWeight(){
 
 let foodCounter=0;
 let editingMealId=null;
+let editingFoodIndex=null;
 let viewedMealId=null;
-let mealNameEditing=false;
 let selectedMealType='snack';
-let mealNameCustom=false;
 let pendingPhoto='';
 
 function mealType(m){
-  if(m.mealType) return m.mealType;
+  if(m.mealType) return String(m.mealType).toLowerCase();
   const h=parseInt((m.time||'12:00').split(':')[0],10);
   return h<11?'breakfast':h<16?'lunch':h<21?'dinner':'snack';
 }
-// Normalize meal types in memory only. Do not persist during startup;
-// doing so can overwrite newer Google Sheets data with stale browser data.
 state.meals.forEach(m=>{m.mealType=mealType(m)});
 
 function addFoodRow(data={}){
@@ -1411,169 +1471,155 @@ function reuseFood(btn){
   showToast('Food details copied');
 }
 function mealTypeLabel(type){return String(type||'snack').charAt(0).toUpperCase()+String(type||'snack').slice(1)}
-function mealNameForDateType(date,type){
-  const match=String(date||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  const iso=match?`${match[2]}/${match[3]}`:(()=>{const d=new Date();return `${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`})();
-  return `${iso} - ${mealTypeLabel(type)}`;
+function diaryMealName(date,type){return `${date} - ${mealTypeLabel(type)}`;}
+function updateMealContext(){
+  const date=document.getElementById('mealDateTime')?.value||isoDate(currentDate);
+  const label=document.getElementById('modalMealTypeLabel');if(label)label.textContent=mealTypeLabel(selectedMealType);
+  const dateLabel=document.getElementById('modalMealDateLabel');if(dateLabel)dateLabel.textContent=fmtDateLong(new Date(date+'T12:00:00'));
+  const icon=document.getElementById('modalMealTypeIcon');if(icon)icon.innerHTML=mealIcon(selectedMealType);
+  document.querySelectorAll('.meal-type-btn').forEach(b=>b.classList.toggle('selected',b.dataset.type===selectedMealType));
 }
-function syncDefaultMealName(force=false){
-  const input=document.getElementById('mealName');if(!input)return;
-  if(!force && mealNameCustom)return;
-  const date=document.getElementById('mealDateTime')?.value||localIsoDate();
-  input.value=mealNameForDateType(date,selectedMealType);
-  const display=document.getElementById('mealNameDisplay');if(display)display.textContent=input.value;
-}
-function setMealNameEditing(editing){
-  mealNameEditing=!!editing;
-  const row=document.getElementById('mealNameDisplayRow');
-  const wrap=document.getElementById('mealNameInputWrap');
-  const input=document.getElementById('mealName');
-  if(row)row.style.display=mealNameEditing?'none':'flex';
-  if(wrap)wrap.style.display=mealNameEditing?'flex':'none';
-  if(mealNameEditing && input){input.focus();input.select();renderReuseOptions();}
-}
-function handleMealNameInput(){
-  const input=document.getElementById('mealName');
-  const date=document.getElementById('mealDateTime')?.value||localIsoDate();
-  mealNameCustom=input.value.trim()!==mealNameForDateType(date,selectedMealType);
-  const display=document.getElementById('mealNameDisplay');if(display)display.textContent=input.value.trim()||mealNameForDateType(date,selectedMealType);
-  renderReuseOptions();
-}
-function clearMealName(){
-  const input=document.getElementById('mealName');if(!input)return;
-  input.value='';mealNameCustom=true;const display=document.getElementById('mealNameDisplay');if(display)display.textContent='';renderReuseOptions();input.focus();
-}
-function selectMealType(type){
-  selectedMealType=type;document.querySelectorAll('.meal-type-btn').forEach(b=>b.classList.toggle('selected',b.dataset.type===type));
-  if(editingMealId===null && !mealNameCustom) syncDefaultMealName(true);
-}
-document.addEventListener('DOMContentLoaded',()=>{
-  const date=document.getElementById('mealDateTime');
-  if(date) date.addEventListener('change',()=>{if(editingMealId===null && !mealNameCustom) syncDefaultMealName(true)});
-});
+function selectMealType(type){selectedMealType=type;updateMealContext();}
+
 function resetModal(){
-  mealNameCustom=false;mealNameEditing=false;
-  document.getElementById('mealName').value='';document.getElementById('mealNameDisplay').textContent='';document.getElementById('mealDateTime').value=localIsoDate();document.getElementById('foodList').innerHTML='';
-  document.getElementById('reuseMenu').classList.remove('open');foodCounter=0;editingMealId=null;pendingPhoto='';selectMealType('snack');setMealNameEditing(false);
+  document.getElementById('mealName').value='';
+  document.getElementById('mealDateTime').value=isoDate(currentDate);
+  document.getElementById('foodList').innerHTML='';
+  foodCounter=0;editingMealId=null;editingFoodIndex=null;pendingPhoto='';
+  selectMealType('snack');
 }
-function openModal(){
-  resetModal();document.getElementById('modalEyebrow').textContent='Log nutrition';document.getElementById('modalTitle').textContent='Add meal';document.getElementById('deleteMealBtn').style.display='none';
-  document.getElementById('modalBackdrop').classList.add('open');syncDefaultMealName(true);addFoodRow();document.querySelector('#modalBackdrop .modal').scrollTop=0;
-}
-function openAddMealForType(type,date){
-  openModal();
+function openModal(type=selectedMealType,date=isoDate(currentDate)){
+  resetModal();
+  selectedMealType=type||'snack';
   document.getElementById('mealDateTime').value=date||isoDate(currentDate);
-  mealNameCustom=false;
-  selectMealType(type||'snack');
-  syncDefaultMealName(true);
+  updateMealContext();
+  document.getElementById('modalEyebrow').textContent='Log nutrition';
+  document.getElementById('modalTitle').textContent='Add food';
+  document.getElementById('deleteMealBtn').style.display='none';
+  document.getElementById('modalBackdrop').classList.add('open');
+  addFoodRow();
+  document.querySelector('#modalBackdrop .modal').scrollTop=0;
 }
-function addMealFromTypeModal(){
-  const type=document.getElementById('mealTypeModalEyebrow').textContent.trim().toLowerCase()||'snack';
-  const date=isoDate(currentDate);
-  closeMealTypeModal();
-  openAddMealForType(type,date);
+function openAddFoodForDiary(type,date,foodIndex=null){
+  const targetDate=date||isoDate(currentDate);
+  const existing=getDiaryMeal(targetDate,type);
+  if(foodIndex!==null && existing?.items?.[foodIndex]){
+    resetModal();
+    editingMealId=Number(existing.id);editingFoodIndex=foodIndex;selectedMealType=type;
+    document.getElementById('mealDateTime').value=targetDate;
+    document.getElementById('modalEyebrow').textContent='Edit food';
+    document.getElementById('modalTitle').textContent='Edit food';
+    document.getElementById('deleteMealBtn').style.display='inline-flex';
+    updateMealContext();
+    addFoodRow(existing.items[foodIndex]);
+  }else{
+    openModal(type,targetDate);
+  }
 }
+function openAddMealForType(type,date){openAddFoodForDiary(type,date)}
+function addMealFromTypeModal(){openAddFoodForDiary(document.getElementById('mealTypeModalEyebrow')?.textContent.trim().toLowerCase()||'snack',isoDate(currentDate));closeMealTypeModal()}
+function closeModal(){document.getElementById('modalBackdrop').classList.remove('open')}
+
 function viewMeal(id){
   const m=state.meals.find(x=>Number(x.id)===Number(id));if(!m)return;
   viewedMealId=id;
   const t=mealTotal(m);
-  document.getElementById('mealViewEyebrow').textContent=mealTypeLabel(mealType(m));
-  document.getElementById('mealViewTypeIcon').innerHTML=mealIcon(mealType(m));
-  document.getElementById('mealViewTitle').textContent=m.name||mealNameForDateType(mealDate(m),mealType(m));
-  document.getElementById('mealViewMeta').textContent=`${fmtDate(new Date((mealDate(m)||localIsoDate())+'T12:00:00'))} · ${mealTypeLabel(mealType(m))}`;
+  const viewDate=mealDate(m)||localIsoDate();
+  const viewType=mealType(m);
+  document.getElementById('mealViewEyebrow').textContent='';
+  document.getElementById('mealViewTypeIcon').innerHTML=mealIcon(viewType);
+  document.getElementById('mealViewTypeIcon').style.display='grid';
+  document.getElementById('mealViewTitle').textContent=`${fmtDate(new Date(viewDate+'T12:00:00'))} · ${mealTypeLabel(viewType)}`;
+  document.getElementById('mealViewMeta').textContent='';
+  document.getElementById('mealViewMeta').style.display='none';
   document.getElementById('mealViewTotals').innerHTML=`<div class="meal-view-stat"><strong>${Math.round(t.calories)}</strong><span>kcal</span></div><div class="meal-view-stat"><strong>${Math.round(t.protein)}g</strong><span>Protein</span></div><div class="meal-view-stat"><strong>${Math.round(t.carbs)}g</strong><span>Carbs</span></div><div class="meal-view-stat"><strong>${Math.round(t.fat)}g</strong><span>Fat</span></div>`;
   const items=Array.isArray(m.items)?m.items:[];
   document.getElementById('mealViewFoods').innerHTML=items.length?items.map(i=>`<div class="meal-view-food"><div class="meal-view-food-name">${esc(i.name||'Food item')}</div><div class="meal-view-food-macros"><span>${Math.round(i.calories||0)} <em>kcal</em></span><span>${Math.round(i.protein||0)}g <em>P</em></span><span>${Math.round(i.carbs||0)}g <em>C</em></span><span>${Math.round(i.fat||0)}g <em>F</em></span></div></div>`).join(''):'<div class="empty">No food items in this meal.</div>';
   document.getElementById('mealViewBackdrop').classList.add('open');
 }
-function closeMealView(){document.getElementById('mealViewBackdrop').classList.remove('open');viewedMealId=null}
+function closeMealView(){document.getElementById('mealViewBackdrop').classList.remove('open');document.getElementById('mealViewTypeIcon').style.display='';document.getElementById('mealViewMeta').style.display='';viewedMealId=null}
 function editMealFromView(){if(viewedMealId===null)return;const id=viewedMealId;closeMealView();editMeal(id)}
 function editMeal(id){
-  closeMealTypeModal();closeMealView();
   const m=state.meals.find(x=>Number(x.id)===Number(id));if(!m)return;
-  resetModal();editingMealId=Number(id);pendingPhoto='';
-  document.getElementById('modalEyebrow').textContent='Edit nutrition';document.getElementById('modalTitle').textContent='Edit meal';document.getElementById('deleteMealBtn').style.display='inline-flex';
-  mealNameCustom=true;document.getElementById('mealName').value=m.name;document.getElementById('mealNameDisplay').textContent=m.name;document.getElementById('mealDateTime').value=mealDate(m);selectMealType(mealType(m));setMealNameEditing(true);(Array.isArray(m.items)?m.items:[]).forEach(addFoodRow);
-  document.getElementById('modalBackdrop').classList.add('open');document.querySelector('#modalBackdrop .modal').scrollTop=0;
+  resetModal();editingMealId=Number(id);selectedMealType=mealType(m);
+  document.getElementById('mealDateTime').value=mealDate(m);
+  document.getElementById('modalEyebrow').textContent='Edit meal';
+  document.getElementById('modalTitle').textContent=mealTypeLabel(mealType(m));
+  document.getElementById('deleteMealBtn').style.display='inline-flex';
+  updateMealContext();
+  (Array.isArray(m.items)?m.items:[]).forEach(i=>addFoodRow(i));
+  document.getElementById('modalBackdrop').classList.add('open');
 }
-function closeModal(){document.getElementById('modalBackdrop').classList.remove('open');document.getElementById('reuseMenu').classList.remove('open')}
-function reuseMeal(id){
-  const m=state.meals.find(x=>x.id===id);if(!m)return;
-  mealNameCustom=true;document.getElementById('mealName').value=m.name;selectMealType(mealType(m));document.getElementById('foodList').innerHTML='';foodCounter=0;(Array.isArray(m.items)?m.items:[]).forEach(addFoodRow);
-  pendingPhoto='';document.getElementById('reuseMenu').classList.remove('open');showToast('Meal details copied');
-}
-function renderReuseOptions(){
-  if(editingMealId!==null)return;
-  const q=document.getElementById('mealName').value.trim().toLowerCase();const menu=document.getElementById('reuseMenu');
-  if(!q){menu.classList.remove('open');menu.innerHTML='';return;}
-  const matches=[];const seen=new Set();
-  [...state.meals].sort((a,b)=>mealDate(b).localeCompare(mealDate(a))).forEach(m=>{if((m.name||'').toLowerCase().includes(q)&&!seen.has(m.name.toLowerCase())){seen.add(m.name.toLowerCase());matches.push(m)}});
-  menu.innerHTML=matches.slice(0,6).map(m=>{const t=mealTotal(m);return `<button type="button" class="reuse-option" onclick="reuseMeal(${m.id})"><strong>${esc(m.name)}</strong><small>${mealType(m)} · ${m.items.length} item${m.items.length===1?'':'s'} · ${Math.round(t.calories)} kcal</small></button>`}).join('');
-  menu.classList.toggle('open',matches.length>0);
-}
+function reuseMeal(id){showToast('Meal reuse is no longer needed — add food directly to a meal.')}
+function renderReuseOptions(){}
 function collectItems(){
   return [...document.querySelectorAll('.food-item')].map(e=>({name:e.querySelector('.f-name').value.trim()||'Food item',calories:+e.querySelector('.f-cal').value||0,protein:+e.querySelector('.f-pro').value||0,carbs:+e.querySelector('.f-carb').value||0,fat:+e.querySelector('.f-fat').value||0})).filter(i=>i.name);
 }
 function saveMeal(){
-  if(!appDataLoaded){showToast('Waiting for Google Sheets to load');return;}
-  let name=document.getElementById('mealName').value.trim();
+  if(!appDataLoaded){showToast('Waiting for the cloud to load');return;}
+  const date=document.getElementById('mealDateTime').value||isoDate(currentDate);
   const items=collectItems();if(!items.length)return showToast('Add at least one food item');
-  const finish=()=>{
-    const date=document.getElementById('mealDateTime').value||localIsoDate();
-    // New meals with a blank name automatically use MM/DD - Meal Type.
-    // Always format from the selected calendar date (never YYYY/MM).
-    if(!name && editingMealId===null){
-      const typeLabel=selectedMealType.charAt(0).toUpperCase()+selectedMealType.slice(1);
-      let month='',day='';
-      const fullDate=String(date||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
-      if(fullDate){ month=fullDate[2]; day=fullDate[3]; }
-      else {
-        const monthOnly=String(date||'').match(/^(\d{4})-(\d{2})$/);
-        if(monthOnly){
-          const now=new Date();
-          month=monthOnly[2];
-          day=String(now.getDate()).padStart(2,'0');
-        }
-      }
-      name=(month&&day)?`${month}/${day} - ${typeLabel}`:`${String(date||localIsoDate()).replace(/^(\d{4})-(\d{2})$/, '$2') } - ${typeLabel}`;
+  let meal=getDiaryMeal(date,selectedMealType);
+  const now=Date.now();
+  if(editingFoodIndex!==null && meal && meal.items[editingFoodIndex]){
+    meal.items[editingFoodIndex]=items[0];meal.updatedAt=now;showToast('Food updated');
+  }else if(editingMealId!==null && meal){
+    meal.items=items;meal.name=meal.name||diaryMealName(date,selectedMealType);meal.updatedAt=now;showToast('Meal updated');
+  }else{
+    if(!meal){
+      meal={id:now,name:diaryMealName(date,selectedMealType),date,photo:'',mealType:selectedMealType,items:[],createdAt:now,updatedAt:now};
+      state.meals.push(meal);
     }
-    if(!name)return showToast('Give your meal a name');
-    document.getElementById('mealName').value=name;
-    const payload={date,name,photo:'',mealType:selectedMealType,items};
-    if(editingMealId!==null){
-      const idx=state.meals.findIndex(m=>m.id===editingMealId);if(idx>=0)state.meals[idx]={...state.meals[idx],...payload,updatedAt:Date.now()};
-    }else { const newId=Date.now(); state.meals.push({id:newId,...payload,createdAt:newId,updatedAt:newId}); if(state._deletedMealIds)state._deletedMealIds=state._deletedMealIds.filter(x=>Number(x)!==newId); }
-    const wasEditing=editingMealId!==null;
-    // Keep manually entered/AI-estimated foods reusable in future meals.
-    const existingFoodNames=new Set((state.foodLibrary||[]).map(i=>String(i.name||'').trim().toLowerCase()).filter(Boolean));
-    items.forEach(i=>{const key=i.name.toLowerCase();if(!existingFoodNames.has(key)){state.foodLibrary.push({...i});existingFoodNames.add(key)}});
-    persist();
-    // Refresh every dependent view immediately so dashboard, meal history,
-    // filters and macro totals all reflect the saved/edited meal at once.
-    refreshUI();
-    closeModal();
-    showToast(wasEditing?'Meal updated':'Meal saved');
-  };
-  finish();
+    meal.items=meal.items.concat(items);meal.name=meal.name||diaryMealName(date,selectedMealType);meal.updatedAt=now;showToast('Food added');
+  }
+  const existingFoodNames=new Set((state.foodLibrary||[]).map(i=>String(i.name||'').trim().toLowerCase()).filter(Boolean));
+  items.forEach(i=>{const key=i.name.toLowerCase();if(!existingFoodNames.has(key)){state.foodLibrary.push({...i});existingFoodNames.add(key)}});
+  persist();refreshUI();closeModal();
 }
 function markMealDeleted(id){const n=Number(id);if(!Number.isFinite(n))return;state._deletedMealIds=[...new Set([...(state._deletedMealIds||[]).map(Number),n])]}
-function deleteMeal(id){if(!appDataLoaded){showToast('Waiting for Google Sheets to load');return;}if(!confirm('Delete this meal?'))return;markMealDeleted(id);state.meals=state.meals.filter(m=>Number(m.id)!==Number(id));persist();refreshUI();showToast('Meal deleted')}
-function deleteEditingMeal(){if(!appDataLoaded){showToast('Waiting for Google Sheets to load');return;}if(editingMealId===null)return;if(!confirm('Delete this meal?'))return;const id=editingMealId;markMealDeleted(id);state.meals=state.meals.filter(m=>Number(m.id)!==Number(id));persist();refreshUI();closeModal();showToast('Meal deleted')}
+function deleteMeal(id){
+  if(!appDataLoaded){showToast('Waiting for the cloud to load');return;}
+  if(!confirm('Delete this meal and all its food?'))return;
+  markMealDeleted(id);state.meals=state.meals.filter(m=>Number(m.id)!==Number(id));persist();refreshUI();showToast('Meal deleted');
+}
+function deleteEditingMeal(){
+  if(!appDataLoaded){showToast('Waiting for the cloud to load');return;}
+  if(editingMealId===null)return;
+  if(editingFoodIndex!==null){
+    const meal=state.meals.find(m=>Number(m.id)===Number(editingMealId));
+    if(meal&&meal.items[editingFoodIndex]){
+      if(!confirm('Delete this food item?'))return;
+      meal.items.splice(editingFoodIndex,1);meal.updatedAt=Date.now();
+      if(!meal.items.length){markMealDeleted(meal.id);state.meals=state.meals.filter(m=>Number(m.id)!==Number(meal.id));}
+      persist();refreshUI();closeModal();showToast('Food deleted');return;
+    }
+  }
+  deleteMeal(editingMealId);closeModal();
+}
 
 function showToast(s){const t=document.getElementById('toast');t.textContent=s;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
 function openDashboardDatePicker(){const el=document.getElementById('dashboardDatePicker');if(!el)return;el.value=localIsoDate(currentDate);try{if(typeof el.showPicker==='function'){el.showPicker();return}}catch(err){};el.focus();el.click()}
 document.getElementById('dateLabel').addEventListener('click',openDashboardDatePicker);
+
+document.querySelectorAll('.date-nav>button').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();}));
 document.getElementById('dateLabel').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')openDashboardDatePicker()});
 document.getElementById('dashboardDatePicker').addEventListener('change',e=>{if(e.target.value){const [y,m,d]=e.target.value.split('-').map(Number);currentDate=new Date(y,m-1,d,12);renderDashboard()}});
+const diaryDateLabel=document.getElementById('diaryDateLabel');
+if(diaryDateLabel){
+  diaryDateLabel.addEventListener('click',()=>{const el=document.getElementById('diaryDatePicker');el.value=isoDate(currentDate);try{if(typeof el.showPicker==='function'){el.showPicker();return}}catch(err){}el.focus();el.click()});
+  diaryDateLabel.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();diaryDateLabel.click()}});
+}
+const diaryDatePicker=document.getElementById('diaryDatePicker');
+if(diaryDatePicker)diaryDatePicker.addEventListener('change',e=>{if(e.target.value){const [y,m,d]=e.target.value.split('-').map(Number);currentDate=new Date(y,m-1,d,12);renderMeals();renderDashboard()}});
+
 let pullStartY=0,pulling=false;document.addEventListener('touchstart',e=>{if(window.scrollY===0){pullStartY=e.touches[0].clientY;pulling=true}}, {passive:true});document.addEventListener('touchmove',e=>{if(!pulling)return;if(e.touches[0].clientY-pullStartY<8)pulling=false}, {passive:true});document.addEventListener('touchend',e=>{if(!pulling)return;const dy=e.changedTouches[0].clientY-pullStartY;pulling=false;if(dy>80)triggerPullRefresh()},{passive:true});
 async function triggerPullRefresh(){const el=document.getElementById('pullRefresh');el.classList.add('show');if(sheetSyncUrl)await new Promise(r=>{const old=remoteLoadInFlight;loadFromSheet(false);let n=0;const t=setInterval(()=>{if(!remoteLoadInFlight||++n>40){clearInterval(t);r()}},50)});else refreshUI();setTimeout(()=>el.classList.remove('show'),350)}
 ['Calories','Protein','Carbs','Fat'].forEach(k=>{const el=document.getElementById('goal'+k);if(el)el.addEventListener('input',markGoalsDirty);});
 renderTip();updateGreeting();setInterval(updateGreeting,600000);updateSyncUI();
-// Paint the lightweight UI immediately, then start the Google Sheets request.
-// This prevents the first screen from feeling blocked by the remote data load.
-refreshUI();
-if(sheetSyncUrl){requestAnimationFrame(()=>loadFromSheet(false));startSheetPolling()}else{setSyncStatus('Google Sheets URL is not configured.','error')}
+// Do not render the app with placeholder/local data. Keep the loading screen visible
+// until the first Google Sheets load succeeds so the user never sees stale data.
+if(sheetSyncUrl){loadFromSheet(false,()=>{if(appDataLoaded)startSheetPolling()})}else{setSyncStatus('Cloud URL is not configured.','error');finishInitialLoading(false)}
 </script>
 </body>
 </html>
